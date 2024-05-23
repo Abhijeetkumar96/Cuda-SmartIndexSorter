@@ -1,5 +1,5 @@
 # Cuda-SmartIndexSorter
-	Welcome to Cuda-SmartIndexSorter, an efficient CUDA-based library designed to sort indices based on corresponding key values without modifying the original key-value pairs. This repository provides high-performance solutions tailored for applications requiring optimized indexing based on key arrays, leveraging the power of NVIDIA's CUDA technology.
+Welcome to Cuda-SmartIndexSorter, an efficient CUDA-based library designed to sort indices based on corresponding key values without modifying the original key-value pairs. This repository provides high-performance solutions tailored for applications requiring optimized indexing based on key arrays, leveraging the power of NVIDIA's CUDA technology.
 
 ## Features
 - High Performance: Utilizes CUDA's parallel processing capabilities to ensure high-speed sorting operations.
