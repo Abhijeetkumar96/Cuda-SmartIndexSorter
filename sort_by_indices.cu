@@ -15,7 +15,7 @@ void display_device_array(const int* d_arr, const int num_items) {
     std::cout << std::endl;
 }
 
-void SortIndicesByKeys(const std::vector<int>& keys, const std::vector<int>& values) {
+void SortIndicesByKeys(const std::vector<int>& keys, const std::vector<int>& values, std::vector<int>& sorted_indices) {
 
     int num_items = keys.size();
     // Device memory allocation
@@ -46,19 +46,8 @@ void SortIndicesByKeys(const std::vector<int>& keys, const std::vector<int>& val
     cub::DeviceRadixSort::SortPairs(d_temp_storage, temp_storage_bytes, d_keys, d_keys_sorted, d_indices, d_indices_sorted, num_items);
 
     // Retrieve the sorted indices
-    std::vector<int> sorted_indices(num_items);
+    sorted_indices.resize(num_items);
     cudaMemcpy(sorted_indices.data(), d_indices_sorted, sizeof(int) * num_items, cudaMemcpyDeviceToHost);
-
-    std::cout << "sorted_indices:\n";
-    for(auto i : sorted_indices)
-        std::cout << i << " ";
-    std::cout << std::endl;
-
-    std::cout << "Sorted indices and corresponding key-value pairs:" << std::endl;
-    for (int i = 0; i < num_items; ++i) {
-        int idx = sorted_indices[i];
-        std::cout << "Index: " << idx << ", Key: " << keys[idx] << ", Value: " << values[idx] << std::endl;
-    }
 
     cudaFree(d_keys);
     cudaFree(d_values);
@@ -76,8 +65,20 @@ int main() {
 
     std::vector<int> keys = {5, 5, 5, 2, 2, 2, 3, 4, 1, 0};
     std::vector<int> values = {2, 3, 4, 1, 0, 5, 5, 5, 2, 2};
+    std::vector<int> indices;
 
-    SortIndicesByKeys(keys, values);
+    SortIndicesByKeys(keys, values, indices);
+
+    std::cout << "sorted_indices:\n";
+    for(auto i : indices)
+        std::cout << i << " ";
+    std::cout << std::endl;
+
+    std::cout << "Sorted indices and corresponding key-value pairs:" << std::endl;
+    for (int i = 0; i < keys.size(); ++i) {
+        int idx = indices[i];
+        std::cout << "Index: " << idx << ", Key: " << keys[idx] << ", Value: " << values[idx] << std::endl;
+    }
 
     return 0;
 }
